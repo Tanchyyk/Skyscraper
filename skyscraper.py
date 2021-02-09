@@ -86,7 +86,8 @@ def check_uniqueness_in_rows(board: list):
     >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*',\
     '*553215', '*35214*', '*41532*', '*2*1***'])
     False
-    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*', '*543215', '*35214*', '441532*', '*22222*'])
+    >>> check_uniqueness_in_rows(['***21**', '412453*', '423145*',\
+    '*543215', '*35214*', '441532*', '*22222*'])
     False
     """
     for row in board:
@@ -168,6 +169,4 @@ def check_skyscrapers(input_path: str):
 
 
 if __name__ == "__main__":
-    # print(check_skyscrapers("check.txt"))
-    arr = "123"
-    print(arr[::-1])
+    print(check_skyscrapers("check.txt"))
