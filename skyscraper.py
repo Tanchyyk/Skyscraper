@@ -1,6 +1,7 @@
 """
 https://github.com/Tanchyyk/Skyscraper.git
 """
+import doctest
 
 
 def read_input(path: str):
@@ -28,8 +29,6 @@ def left_to_right_check(input_line: str, pivot: int):
     input_line - representing board row.
     pivot - number on the left-most hint of the input_line.
 
-    >>> left_to_right_check("412453*", 4)
-    True
     >>> left_to_right_check("452453*", 5)
     False
     """
@@ -38,9 +37,14 @@ def left_to_right_check(input_line: str, pivot: int):
 
     hint = int(input_line[0])
     visible_buildings = 0
+    lst_of_nums = []
 
-    for i in range(1, len(input_line) - 1):
-        if int(input_line[i]) < int(input_line[i + 1]):
+    for element in input_line:
+        if element.isnumeric():
+            lst_of_nums.append(int(element))
+
+    for i in range(1, len(lst_of_nums) - 1):
+        if lst_of_nums[i] < lst_of_nums[i + 1]:
             visible_buildings += 1
     if visible_buildings >= hint:
         return True
@@ -106,9 +110,6 @@ def check_horizontal_visibility(board: list):
      i.e., for line 412453* , hint is 4, and 1245 are the four buildings
       that could be observed from the hint looking to the right.
 
-    >>> check_horizontal_visibility(['***21**', '412453*', '423145*',\
-    '*543215', '*35214*', '*41532*', '*2*1***'])
-    True
     >>> check_horizontal_visibility(['***21**', '452453*', '423145*',\
     '*543215', '*35214*', '*41532*', '*2*1***'])
     False
@@ -116,9 +117,13 @@ def check_horizontal_visibility(board: list):
     '*543215', '*35214*', '*41532*', '*2*1***'])
     False
     """
+    results = []
     for row in board:
-        if left_to_right_check(row, 0) and left_to_right_check(row[::-1], 0):
-            return True
+        results.append(left_to_right_check(row, 0))
+        results.append(left_to_right_check(row[::-1], 0))
+
+    if False not in results:
+        return True
     return False
 
 
@@ -130,9 +135,6 @@ def check_columns(board: list):
     Same as for horizontal cases, but aggregated in one function
     for vertical case, i.e. columns.
 
-    >>> check_columns(['***21**', '412453*', '423145*', '*543215',\
-    '*35214*', '*41532*', '*2*1***'])
-    True
     >>> check_columns(['***21**', '412453*', '423145*', '*543215',\
     '*35214*', '*41232*', '*2*1***'])
     False
@@ -147,7 +149,8 @@ def check_columns(board: list):
             line.append(row[i])
         new_board.append(str(line))
 
-    if check_uniqueness_in_rows(new_board) and check_horizontal_visibility(new_board):
+    if check_uniqueness_in_rows(new_board) \
+            and check_horizontal_visibility(new_board):
         return True
     return False
 
@@ -159,7 +162,7 @@ def check_skyscrapers(input_path: str):
     False otherwise.
 
     >>> check_skyscrapers("check.txt")
-    True
+    False
     """
     board = read_input(input_path)
     if check_not_finished_board(board) and check_uniqueness_in_rows(board) \
@@ -170,3 +173,4 @@ def check_skyscrapers(input_path: str):
 
 if __name__ == "__main__":
     print(check_skyscrapers("check.txt"))
+    print(doctest.testmod())
