@@ -33,35 +33,18 @@ def left_to_right_check(input_line: str, pivot: int):
     >>> left_to_right_check("452453*", 5)
     False
     """
-    input_line = input_line[1:][:pivot]
+    if input_line[0] == "*":
+        return True
 
-    for i in range(pivot):
-        for j in range(i, pivot):
-            if input_line[i] > input_line[j]:
-                return False
-    return True
+    hint = int(input_line[0])
+    visible_buildings = 0
 
-
-def right_to_left_check(input_line: str, pivot: int):
-    """
-    Check row-wise visibility from left to right.
-    Return True if number of building from the
-    left-most hint is visible looking to the right,
-    False otherwise.
-
-    input_line - representing board row.
-    pivot - number on the left-most hint of the input_line.
-
-    >>> right_to_left_check("412453*", 4)
-    True
-    >>> right_to_left_check("*524534", 5)
-    False
-    """
-    new_line = str(list(input_line).reverse())
-    if left_to_right_check(new_line, pivot):
+    for i in range(1, len(input_line) - 1):
+        if int(input_line[i]) < int(input_line[i + 1]):
+            visible_buildings += 1
+    if visible_buildings >= hint:
         return True
     return False
-
 
 
 def check_not_finished_board(board: list):
@@ -133,7 +116,7 @@ def check_horizontal_visibility(board: list):
     False
     """
     for row in board:
-        if left_to_right_check(row, 0) and right_to_left_check(row, 0):
+        if left_to_right_check(row, 0) and left_to_right_check(row[::-1], 0):
             return True
     return False
 
@@ -156,7 +139,16 @@ def check_columns(board: list):
     '*35214*', '*41532*', '*2*1***'])
     False
     """
-    pass
+    new_board = []
+    for i in range(len(board)):
+        line = []
+        for row in board:
+            line.append(row[i])
+        new_board.append(str(line))
+
+    if check_uniqueness_in_rows(new_board) and check_horizontal_visibility(new_board):
+        return True
+    return False
 
 
 def check_skyscrapers(input_path: str):
@@ -168,8 +160,14 @@ def check_skyscrapers(input_path: str):
     >>> check_skyscrapers("check.txt")
     True
     """
-    pass
+    board = read_input(input_path)
+    if check_not_finished_board(board) and check_uniqueness_in_rows(board) \
+            and check_horizontal_visibility(board) and check_columns(board):
+        return True
+    return False
 
 
 if __name__ == "__main__":
-    print(check_skyscrapers("check.txt"))
+    # print(check_skyscrapers("check.txt"))
+    arr = "123"
+    print(arr[::-1])
