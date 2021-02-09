@@ -1,2 +1,2 @@
 # Skyscraper
-This module is created to validate the board of a game.
+This program is created to check if the winning combination is on the board.
